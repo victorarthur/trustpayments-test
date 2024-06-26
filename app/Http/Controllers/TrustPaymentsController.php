@@ -17,10 +17,7 @@ upon checking it, it has not been created using base64url encoding so it is fail
 
 Please can you ensure you are creating the JWT in Base64Url encoding as per our guide: JSON Web Token
 
-HMACSHA256(
-base64UrlEncode(header) + "." +
-base64UrlEncode(payload),
-secret)
+HMACSHA256(base64UrlEncode(header) + "." + base64UrlEncode(payload), secret)
 
 The final step is to ensure the signature is Base64URL encoded.
 
@@ -41,7 +38,7 @@ Senior Technical Support Officer
 
         $secret = str_replace(['+', '/', '='], ['-', '_', ''], base64_encode('60-2771952b06f6403e7fc854ccff7a778317f79626212e659ac1b45e7e8822a78c'));
 
-        return hash_hmac('sha256',$header . '.' . $payload . '.' . $secret, true);
+        return hash_hmac('sha256',$header . '.' . $payload, $secret);
     }
 
     public function processAuth() {
