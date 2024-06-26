@@ -7,9 +7,7 @@
 </head>
 <body>
 	<div id="st-notification-frame"></div>
-	{{-- <form id="st-form" action="/trustpayments-checkout" method="POST"> --}}
-	{{-- Mark suggested to use the CDN endpoint as the action param, however the documentation said a merchant hosted endpoint --}}
-	<form id="st-form" action="https://cdn.eu.trustpayments.com/js/latest/st.js" method="POST">
+	<form id="st-form" action="https://test.noobru.com/trustpayments-checkout" method="POST">
 		<div id="st-card-number"></div>
 		<div id="st-expiration-date"></div>
 		<div id="st-security-code"></div>
