@@ -38,7 +38,7 @@ Senior Technical Support Officer
 
         $secret = str_replace(['+', '/', '='], ['-', '_', ''], base64_encode('60-2771952b06f6403e7fc854ccff7a778317f79626212e659ac1b45e7e8822a78c'));
 
-        return hash_hmac('sha256',$header . '.' . $payload, $secret);
+        return hash_hmac('sha256',$header . '.' . $payload, $secret, true);
     }
 
     public function processAuth() {
