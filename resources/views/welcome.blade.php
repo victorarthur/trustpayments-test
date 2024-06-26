@@ -7,7 +7,7 @@
 </head>
 <body>
 <div id="st-notification-frame"></div>
-<form id="st-form" action="https://test.noobru.com/trustpayments-checkout" method="POST">
+<form id="st-form" action="https://test.noobru.com" method="POST">
     <div id="st-card-number"></div>
     <div id="st-expiration-date"></div>
     <div id="st-security-code"></div>
