@@ -21,9 +21,6 @@ class TrustPaymentsController extends Controller
         $encodedHeader = $this->base64UrlEncode($header);
         $encodedPayload = $this->base64UrlEncode($payload);
 
-        // Concatenate the encoded header and payload with a dot
-        $data = $encodedHeader . "." . $encodedPayload;
-
         /*
          * HMACSHA256(
          *    base64UrlEncode(header) + "." +
@@ -32,7 +29,7 @@ class TrustPaymentsController extends Controller
          */
 
         // Create the HMACSHA256 signature
-        $signature = hash_hmac('sha256', $data, $secret);
+        $signature = hash_hmac('sha256', $encodedHeader . "." . $encodedPayload, $secret);
 
         // Encode the signature using base64UrlEncode
         return $this->base64UrlEncode($signature);
