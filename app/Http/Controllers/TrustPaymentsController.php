@@ -25,7 +25,7 @@ class TrustPaymentsController extends Controller
         $data = $encodedHeader . "." . $encodedPayload;
 
         // Create the HMACSHA256 signature
-        $signature = hash_hmac('sha256', $data, $secret, false);
+        $signature = hash_hmac('sha256', $data, $secret);
 
         // Encode the signature using base64UrlEncode
         return $this->base64UrlEncode($signature);
@@ -38,6 +38,13 @@ class TrustPaymentsController extends Controller
         $secret = '60-2771952b06f6403e7fc854ccff7a778317f79626212e659ac1b45e7e8822a78c';
 
         $signature = $this->createJwtSignature($header, $payload, $secret);
+
+        /*
+         * HMACSHA256(
+         *    base64UrlEncode(header) + "." +
+         *    base64UrlEncode(payload),
+         *    secret)
+         */
 
         return $this->base64UrlEncode($header) . "." . $this->base64UrlEncode($payload) . "." . $signature;
     }
