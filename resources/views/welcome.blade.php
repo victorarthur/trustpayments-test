@@ -15,18 +15,35 @@
 </form>
 <script src="https://cdn.eu.trustpayments.com/js/latest/st.js"></script>
 <script>
-    let jwt_data = {
-        'payload': {
-            'accounttypedescription': 'ECOM',
-            'baseamount': '1050',
-            'currencyiso3a': 'GBP',
-            'sitereference': 'test_noolabs127216',
-            'requesttypedescriptions': ['THREEDQUERY', 'AUTH'],
-            'billingfirstname': 'Bertalan',
-            'billinglastname': 'Sandor',
-            'locale': 'en_GB'
-        },
-        'iat': parseInt(Date.now() / 1000),
+	let jwt_data = {
+		'payload': {
+			"accounttypedescription": "ECOM",
+			"sitereference": "test_noolabs127216",
+			"requesttypedescriptions": ["THREEDQUERY", "AUTH"],
+			"customeremail": "ilyen85@proton.me",
+			"customertelephone": "+3606709422082",
+			"customertown": "Veszprémvarsány",
+			"customercounty": null,
+			"customerstreet": "Rákóczi Ferenc utca 128.",
+			"customercountryiso2a": "HU",
+			"customerfirstname": "Bertalan",
+			"customerlastname": "Sándor",
+			"customerpostcode": "8438",
+			"billingemail": "ilyen85@proton.me",
+			"billingtelephone": "+3606709422082",
+			"billingtown": "Veszprémvarsány",
+			"billingcounty": null,
+			"billingstreet": "Rákóczi Ferenc utca 128.",
+			"billingcountryiso2a": "HU",
+			"billingfirstname": "Bertalan",
+			"billinglastname": "Sándor",
+			"billingpostcode": "8438",
+			"baseamount": 5684,
+			"currencyiso3a": "USD",
+			"orderreference": 2058309,
+			'locale': 'en_GB'
+		},
+		'iat': parseInt(Date.now() / 1000),
         'iss': 'jwt@noolabstrading.com',
     }
 
