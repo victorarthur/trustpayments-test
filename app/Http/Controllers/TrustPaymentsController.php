@@ -52,6 +52,7 @@ class TrustPaymentsController extends Controller
 
     private function retrieveFailure(string $error_code, string $error_data = ''): string
     {
+        // Add these error messages to the database or configuration file
         $error_messages = [
             '30000' => "The transaction failed due to invalid transaction information.",
             '60010' => "The transaction failed due to a communication error. Please verify whether the amount has been charged. If necessary, contact our customer service for assistance with a refund.",
@@ -84,7 +85,12 @@ class TrustPaymentsController extends Controller
         return response()->json([
             'success' => true,
             'transactionId' => $response['transactionreference'],
-            'payload' => $payload,
+            'transactionDate' => $response['transactionstartedtimestamp'],
+            'amount' => $response['baseamount'],
+            'currency' => $response['currencyiso3a'],
+            'lastFourDigits' => substr($response['maskedpan'], -4),
+            'cardType' =>  strtolower($response['paymenttypedescription']),
+            //'payload' => $payload,
         ]);
     }
 
