@@ -27,6 +27,14 @@ class TrustPaymentsController extends Controller
         return $this->base64UrlEncode($signature);
     }
 
+    private function base64UrlDecode($data)
+    {
+        // Replace '-' with '+', '_' with '/', and add '=' if needed
+        $base64 = str_replace(['-', '_'], ['+', '/'], $data);
+        // Base64 decode the data
+        return base64_decode($base64);
+    }
+
     public function generateJWT()
     {
         $header = json_encode(['alg' => 'HS256', 'typ' => 'JWT']);
@@ -40,19 +48,23 @@ class TrustPaymentsController extends Controller
     private function validateJWT(string $jwt): bool
     {
         $parts = explode('.', $jwt);
-        $header = json_decode(base64_decode($parts[0]), true);
-        $payload = json_decode(base64_decode($parts[1]), true);
+        $header = $this->base64UrlDecode($parts[0]);
+        $payload = $this->base64UrlDecode($parts[1]);
         $signature = $parts[2];
 
+        var_dump($header);
+        var_dump($payload);
+        var_dump($signature);
+
         // Check if the signature is correct
-        $expectedSignature = $this->createJwtSignature($parts[0], $parts[1], '60-2771952b06f6403e7fc854ccff7a778317f79626212e659ac1b45e7e8822a78c');
+        $expectedSignature = $this->createJwtSignature($header, $payload, '60-2771952b06f6403e7fc854ccff7a778317f79626212e659ac1b45e7e8822a78c');
+        var_dump($expectedSignature);
 
-       // Check if expected signature is equal to the signature in the JWT
-
+        // Check if expected signature is equal to the signature in the JWT
         if ($expectedSignature === $signature) {
             return true;
         }
-        
+
         return false;
     }
 
@@ -65,7 +77,14 @@ class TrustPaymentsController extends Controller
         // Validate JWT in the response that the signature is correct
         $is_jwt_valid = $this->validateJWT($response['jwt']);
 
-        return ($is_jwt_valid && $response['errorcode'] == 0) ? response()->json([
+        if (!$is_jwt_valid) {
+            return response()->json([
+                'success' => false,
+                'message' => 'JWT validation failed.',
+            ]);
+        }
+
+        return ($response['errorcode'] == 0) ? response()->json([
             'success' => true,
             'transactionId' => $response['transactionreference'],
 
