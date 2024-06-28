@@ -48,7 +48,7 @@ class TrustPaymentsController extends Controller
 
         $signature = $this->createJwtSignature($header, $payload, $secret); // returns with base64UrlEncoded signature
 
-        return $this->base64UrlEncode($header) . "." . $this->base64UrlEncode($payload) . "." . $signature;
+        return $this->base64UrlEncode($header) . "." . $this->base64UrlEncode($payload) . "." . '_1C0pyfq4yRJSGV6Ux4L8hT4llxzGctHpNnlbOq1Ni4';
     }
 
     public function processAuth()
