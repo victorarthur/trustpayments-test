@@ -28,13 +28,13 @@ class TrustPaymentsController extends Controller
          *    secret)
          */
 
-        $secret = $this->base64UrlEncode($secret);
+        //$secret = $this->base64UrlEncode($secret);
 
         // Create the HMACSHA256 signature
         $signature = hash_hmac('sha256', $encodedHeader . "." . $encodedPayload, $secret);
 
         // Encode the signature using base64UrlEncode
-        return $this->base64UrlEncode($signature);
+        return $signature;
     }
 
     public function generateJWT()
