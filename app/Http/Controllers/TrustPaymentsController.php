@@ -34,7 +34,7 @@ class TrustPaymentsController extends Controller
         $signature = hash_hmac('sha256', $encodedHeader . "." . $encodedPayload, $secret);
 
         // Encode the signature using base64UrlEncode
-        return base64_encode($signature);
+        return $this->base64UrlEncode($signature);
     }
 
     public function generateJWT()
@@ -43,8 +43,8 @@ class TrustPaymentsController extends Controller
         $payload = json_encode(json_decode(request()->getContent(), true));
         $secret = '60-2771952b06f6403e7fc854ccff7a778317f79626212e659ac1b45e7e8822a78c';
 
-//jwt@noolabstrading.com
-//60-2771952b06f6403e7fc854ccff7a778317f79626212e659ac1b45e7e8822a78c
+        //jwt@noolabstrading.com
+        //60-2771952b06f6403e7fc854ccff7a778317f79626212e659ac1b45e7e8822a78c
 
         $signature = $this->createJwtSignature($header, $payload, $secret); // returns with base64UrlEncoded signature
 
