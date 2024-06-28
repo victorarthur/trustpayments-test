@@ -34,7 +34,7 @@ class TrustPaymentsController extends Controller
         $signature = hash_hmac('sha256', $encodedHeader . "." . $encodedPayload, $secret);
 
         // Encode the signature using base64UrlEncode
-        return $signature;
+        return base64_encode($signature);
     }
 
     public function generateJWT()
