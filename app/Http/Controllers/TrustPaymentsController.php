@@ -20,13 +20,6 @@ class TrustPaymentsController extends Controller
         $encodedHeader = $this->base64UrlEncode($header);
         $encodedPayload = $this->base64UrlEncode($payload);
 
-        /*
-         * HMACSHA256(
-         *    base64UrlEncode(header) + "." +
-         *    base64UrlEncode(payload),
-         *    secret)
-         */
-
         // Create the HMACSHA256 signature
         $signature = hash_hmac('sha256', $encodedHeader . "." . $encodedPayload, $secret, true);
 
@@ -44,9 +37,35 @@ class TrustPaymentsController extends Controller
         return $this->base64UrlEncode($header) . "." . $this->base64UrlEncode($payload) . "." . $signature;
     }
 
+    private function validateJWT(string $jwt): bool
+    {
+        $parts = explode('.', $jwt);
+        $header = json_decode(base64_decode($parts[0]), true);
+        $payload = json_decode(base64_decode($parts[1]), true);
+        $signature = $parts[2];
+
+        // Check if the signature is correct
+        $expectedSignature = $this->createJwtSignature($parts[0], $parts[1], '60-2771952b06f6403e7fc854ccff7a778317f79626212e659ac1b45e7e8822a78c');
+        return false;
+    }
+
+
     public function processAuth()
     {
-        dd(request()->all());
-        // it never gets to this point
+        $response = request()->all();
+
+        // Check if the response is valid
+        // Validate JWT in the response that the signature is correct
+        $is_jwt_valid = $this->validateJWT($response['jwt']);
+
+        return ($is_jwt_valid && $response['errorcode'] == 0) ? response()->json([
+            'success' => true,
+            'transactionId' => $response['transactionreference'],
+
+        ]) : response()->json([
+            'success' => false,
+            'message' => $response['errormessage'],
+        ]);
+
     }
 }
