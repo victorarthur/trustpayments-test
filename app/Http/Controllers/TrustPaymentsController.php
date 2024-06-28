@@ -45,27 +45,25 @@ class TrustPaymentsController extends Controller
         return $this->base64UrlEncode($header) . "." . $this->base64UrlEncode($payload) . "." . $signature;
     }
 
-    private function validateJWT(string $jwt): bool
+    private function validateJWT(string $jwt): array
     {
         $parts = explode('.', $jwt);
         $header = $this->base64UrlDecode($parts[0]);
         $payload = $this->base64UrlDecode($parts[1]);
         $signature = $parts[2];
 
-        var_dump($header);
-        var_dump($payload);
-        var_dump($signature);
-
         // Check if the signature is correct
         $expectedSignature = $this->createJwtSignature($header, $payload, '60-2771952b06f6403e7fc854ccff7a778317f79626212e659ac1b45e7e8822a78c');
-        var_dump($expectedSignature);
 
         // Check if expected signature is equal to the signature in the JWT
         if ($expectedSignature === $signature) {
-            return true;
+            return [
+                'valid' => true,
+                'payload' => json_decode($payload, true),
+                ];
         }
 
-        return false;
+        return ['valid' => false];
     }
 
 
@@ -77,7 +75,7 @@ class TrustPaymentsController extends Controller
         // Validate JWT in the response that the signature is correct
         $is_jwt_valid = $this->validateJWT($response['jwt']);
 
-        if (!$is_jwt_valid) {
+        if (!$is_jwt_valid['valid']) {
             return response()->json([
                 'success' => false,
                 'message' => 'JWT validation failed.',
@@ -87,6 +85,7 @@ class TrustPaymentsController extends Controller
         return ($response['errorcode'] == 0) ? response()->json([
             'success' => true,
             'transactionId' => $response['transactionreference'],
+            'payload' => $is_jwt_valid['payload'],
 
         ]) : response()->json([
             'success' => false,
