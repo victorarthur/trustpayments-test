@@ -109,6 +109,8 @@ class TrustPaymentsController extends Controller
                 return $this->handleInvalidJwt();
             }
 
+            dd($is_jwt_valid['payload']);
+
             $auth_result = collect($is_jwt_valid['payload']['response'])->firstWhere('requesttypedescription', 'AUTH');
 
             if ($auth_result) {
