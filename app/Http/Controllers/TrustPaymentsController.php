@@ -109,13 +109,13 @@ class TrustPaymentsController extends Controller
                 return $this->handleInvalidJwt();
             }
 
-            dd($is_jwt_valid['payload']);
-
-            $auth_result = collect($is_jwt_valid['payload']['response'])->firstWhere('requesttypedescription', 'AUTH');
+            $payload = $is_jwt_valid['payload']['payload'];
+            // This is for only actual payment processing. Not for subscriptions or recurring payments.
+            $auth_result = collect($payload['response'])->firstWhere('requesttypedescription', 'AUTH');
 
             if ($auth_result) {
                 if ($auth_result['errorcode'] === '0') {
-                    return $this->handleSuccessfulPayment($response, $is_jwt_valid['payload']);
+                    return $this->handleSuccessfulPayment($payload['response'], $payload);
                 }
 
                 $failure_reason = $this->retrieveFailure(
@@ -125,8 +125,9 @@ class TrustPaymentsController extends Controller
             } else {
                 $failure_reason = 'No valid authorization found in the response.';
             }
-
-            return $this->handleFailedPayment($response, $failure_reason);
+            //$payload['response'] is an array get the last element of the array
+            $last_response = end($payload['response']);
+            return $this->handleFailedPayment($last_response, $failure_reason);
         } catch (\Exception $e) {
             Log::error('An error occurred while processing the authentication: ' . $e->getMessage());
             return response()->json([
