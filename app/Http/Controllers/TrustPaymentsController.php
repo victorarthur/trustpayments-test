@@ -81,6 +81,7 @@ class TrustPaymentsController extends Controller
 
     private function handleSuccessfulPayment(array $response, array $payload): JsonResponse
     {
+        dd($response);
         return response()->json([
             'success' => true,
             'transactionId' => $response['transactionreference'],
