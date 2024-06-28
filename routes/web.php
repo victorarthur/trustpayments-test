@@ -9,4 +9,4 @@ Route::get('/', function () {
 
 Route::post('/jwt-generate', [TrustPaymentsController::class, 'generateJWT']);
 
-Route::post('/', [TrustPaymentsController::class, 'processAuth']);
+Route::post('/process-payment', [TrustPaymentsController::class, 'processAuth']);
