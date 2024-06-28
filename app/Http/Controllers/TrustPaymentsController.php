@@ -46,6 +46,13 @@ class TrustPaymentsController extends Controller
 
         // Check if the signature is correct
         $expectedSignature = $this->createJwtSignature($parts[0], $parts[1], '60-2771952b06f6403e7fc854ccff7a778317f79626212e659ac1b45e7e8822a78c');
+
+       // Check if expected signature is equal to the signature in the JWT
+
+        if ($expectedSignature === $signature) {
+            return true;
+        }
+        
         return false;
     }
 
