@@ -81,7 +81,6 @@ class TrustPaymentsController extends Controller
 
     private function handleSuccessfulPayment(array $response, array $payload): JsonResponse
     {
-        dd($response);
         return response()->json([
             'success' => true,
             'transactionId' => $response['transactionreference'],
@@ -116,7 +115,7 @@ class TrustPaymentsController extends Controller
 
             if ($auth_result) {
                 if ($auth_result['errorcode'] === '0') {
-                    return $this->handleSuccessfulPayment($payload['response'], $payload);
+                    return $this->handleSuccessfulPayment($auth_result, $payload);
                 }
 
                 $failure_reason = $this->retrieveFailure(
